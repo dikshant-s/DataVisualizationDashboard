@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from "chart.js";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale);
 
-const IntensityBarChart = ({ filters }) => {
+const RelevanceTopicChart = ({ filters }) => {
   const [chartData, setChartData] = useState(null);
 
   useEffect(() => {
@@ -14,37 +14,32 @@ const IntensityBarChart = ({ filters }) => {
       .then((res) => {
         const grouped = {};
         res.data.forEach(item => {
-          const country = item.country || "Unknown";
-          grouped[country] = (grouped[country] || 0) + (item.intensity || 0);
+          const topic = item.topic || "Unknown";
+          grouped[topic] = (grouped[topic] || 0) + (item.relevance || 0);
         });
 
         const labels = Object.keys(grouped);
-        const values = Object.values(grouped);
+        const values = labels.map(l => grouped[l]);
 
         setChartData({
-          labels: labels,
+          labels,
           datasets: [{
-            label: "Total Intensity",
+            label: "Relevance by Topic",
             data: values,
-            backgroundColor: "rgba(75,192,192,0.6)",
-            borderRadius: 5,
+            backgroundColor: "rgba(153, 102, 255, 0.6)"
           }]
         });
-      }).catch((err) => {
-        console.error("Error fetching data:", err);
       });
   }, [filters]);
 
-  if (!chartData || chartData.labels.length === 0) {
-    return <p>Loading chart or no data to display...</p>;
-  }
+  if (!chartData) return <p>Loading Relevance chart...</p>;
 
   return (
     <div style={{ maxWidth: "800px", margin: "auto" }}>
-      <h3>Intensity by Country</h3>
-      <Bar data={chartData} />
+      <h3>Relevance by Topic</h3>
+      <Bar data={chartData} options={{ indexAxis: "y" }} />
     </div>
   );
 };
 
-export default IntensityBarChart;
+export default RelevanceTopicChart;

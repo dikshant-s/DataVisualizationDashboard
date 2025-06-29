@@ -10,7 +10,7 @@ const FilterPanel = ({ setFilters }) => {
   useEffect(() => {
     fields.forEach((field) => {
       axios
-        .get(`https://datavisualizationdashboardbackend-33am.onrender.com/api/data/filters/${field}`)
+        .get(`http://localhost:5000/api/data/filters/${field}`)
         .then((res) =>
           setFilterOptions((prev) => ({ ...prev, [field]: res.data }))
         );

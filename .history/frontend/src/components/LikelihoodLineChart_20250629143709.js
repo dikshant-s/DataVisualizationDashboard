@@ -10,7 +10,7 @@ const LikelihoodLineChart = ({ filters }) => {
 
   useEffect(() => {
     const params = new URLSearchParams(filters).toString();
-    axios.get(`https://datavisualizationdashboardbackend-33am.onrender.com/api/data?` + params)
+    axios.get(`https://datavisualizationdashboardbackend-33am.onrender.com/api/data?" + params)
       .then((res) => {
         const grouped = {};
         res.data.forEach(item => {
